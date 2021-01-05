@@ -48,6 +48,50 @@ namespace Lab1
             return tasks.Sum(task => task.Result);
         }
 
+        private static int Memory_bound(int n, int number)
+        {
+            SetNumberOfThreads(n);
+
+            var array = new int[number];
+            for (var i = 0; i < number; i++)
+            {
+                array[i] = -1;
+            }
+
+            return Fibonacci(array, number);
+        }
+
+        private static int Fibonacci(IList<int> results, int n)
+        {
+            int val;
+
+            if (n <= 0)
+            {
+                return 0;
+            }
+
+            if (results[n - 1] != -1)
+                return results[n - 1];
+
+            switch (n)
+            {
+                case 0:
+                    val = 0;
+                    break;
+                case 1:
+                    val = 1;
+                    break;
+                default:
+                    val = Task.Run(() => Fibonacci(results, n - 2)).Result +
+                          Task.Run(() => Fibonacci(results, n - 1)).Result;
+                    break;
+            }
+
+            results[n - 1] = val;
+
+            return val;
+        }
+
         private static int Factorial(int n)
         {
             int i, fact = 1;
