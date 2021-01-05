@@ -77,7 +77,24 @@ namespace Lab3
 
                     break;
                 case 2:
-                    // todo
+                    Console.Write("Iterations: ");
+                    var iterations = int.Parse(Console.ReadLine());
+
+                    timer.Start();
+                    for (var j = 0; j < k; j++)
+                    {
+                        Task.Run(() =>
+                        {
+                            MoveParticle_Iteration(crystal, 0, iterations, p);
+                        });
+                    }
+
+                    ShowCrystal(crystal, timer.Elapsed.TotalSeconds);
+
+                    timer.Stop();
+                    timer.Reset();
+
+                    Console.ReadKey();
 
                     break;
                 default:
@@ -94,6 +111,14 @@ namespace Lab3
                 MoveParticle(crystal, ref cell, p);
 
                 Thread.Sleep(delay * 1000);
+            }
+        }
+
+        private static void MoveParticle_Iteration(IList<int> crystal, int cell, int iterations, double p)
+        {
+            for (var i = 0; i < iterations; i++)
+            {
+                MoveParticle(crystal, ref cell, p);
             }
         }
 
