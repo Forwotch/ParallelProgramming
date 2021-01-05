@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -11,7 +12,53 @@ namespace Lab1
     {
         private static void Main()
         {
+            const string headFormat = "{0,-15}";
+            const string lineFormat = "{0,-9}";
 
+            Console.Write(string.Format(headFormat, ""));
+            Console.WriteLine(string.Format(
+                "{0,-8} {1,-8} {2,-8} {3,-8} {4,-8} {5,-8} {6,-8} {7,-8} {8,-8} {9,-8}",
+                "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
+
+            var timer = new Stopwatch();
+
+            Console.Write(string.Format(headFormat, nameof(IO_bound)));
+            for (var i = 1; i <= 10; i++)
+            {
+                timer.Start();
+                IO_bound(i);
+                timer.Stop();
+
+                Console.Write(lineFormat, timer.Elapsed.Ticks);
+                timer.Reset();
+            }
+            Console.WriteLine();
+
+            Console.Write(string.Format(headFormat, nameof(CPU_bound)));
+            for (var i = 1; i <= 10; i++)
+            {
+                timer.Start();
+                CPU_bound(i, 45);
+                timer.Stop();
+
+                Console.Write(lineFormat, timer.Elapsed.Ticks);
+                timer.Reset();
+            }
+            Console.WriteLine();
+
+            Console.Write(string.Format(headFormat, nameof(Memory_bound)));
+            for (var i = 1; i <= 10; i++)
+            {
+                timer.Start();
+                Memory_bound(i, 42);
+                timer.Stop();
+
+                Console.Write(lineFormat, timer.Elapsed.Ticks);
+                timer.Reset();
+            }
+            Console.WriteLine();
+
+            Console.ReadKey();
         }
 
         private static void IO_bound(int n)
